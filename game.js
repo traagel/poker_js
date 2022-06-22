@@ -119,7 +119,6 @@ export class Game{
             for(let i = 0; i < 3; i++){
                 this.flop.push(this.deck.getCard());
             }
-            let i = 0;
             for(const card of this.flop){
                 let ul = document.getElementById("flop-list");
                 let cardImg = document.createElement("img");
@@ -148,11 +147,14 @@ export class Game{
     }
 
     play_river(){
-        let card = this.deck.getCard();
-        let ul = document.getElementById("flop-list");
-        let cardImg = document.createElement("img");
-        cardImg.src = "./cards/" + card.describe() + ".png";
+        if(this.flop.length < 5) {
+            let card = this.deck.getCard();
+            this.flop.push(card);
+            let ul = document.getElementById("flop-list");
+            let cardImg = document.createElement("img");
+            cardImg.src = "./cards/" + card.describe() + ".png";
 
-        ul.appendChild(cardImg);
+            ul.appendChild(cardImg);
+        }
     }
 }

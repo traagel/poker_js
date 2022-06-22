@@ -8,4 +8,4 @@ game.addPlayer("player-3");
 game.addPlayer("player-4");
 
 game.startGame();
-document.getElementById("river").addEventListener("click", function() {game.play_river();});
+document.getElementById("turn").addEventListener("click", function() {game.play_river();});
