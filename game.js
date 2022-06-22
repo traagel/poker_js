@@ -157,4 +157,14 @@ export class Game{
             ul.appendChild(cardImg);
         }
     }
+
+    fold(player){
+        document.getElementById(player + "-fold").disabled = true;
+        document.getElementById(player + "-check").disabled = true;
+        document.getElementById(player + "-raise").disabled = true;
+    }
+
+    getPlayers(){
+        return this.players();
+    }
 }
