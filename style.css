@@ -1,0 +1,41 @@
+li {
+    display: inline; /* the default for span */
+    width: 100px;
+    height: 100px;
+    padding: 5px;
+}
+
+#player-div img{
+    height: 150px;
+    width: 100px;
+    margin: 1px;
+}
+
+#flop-div img{
+    height: 150px;
+    width: 100px;
+    margin: 1px;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+.row > {
+    display: table;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+#flop-div > *{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+* {
+    box-sizing: border-box;
+}
