@@ -4,7 +4,7 @@ export class Player {
     this.money = money;
     this.hand = [];
     this.cardsInHand = 0;
-    this.currentBet = 0;
+    this.Bet = 0;
     this.status = "";
   }
 
@@ -26,7 +26,7 @@ export class Player {
     return this.hand;
   }
 
-  getMoney() {
+  showMoney() {
     return this.money;
   }
 
@@ -52,4 +52,13 @@ export class Player {
   getStatus() {
     return this.status;
   }
+
+  addMoney(amount){
+    this.money += amount;
+  }
+
+  removeMoney(amount){
+    this.money -= amount;
+  }
+
 }

@@ -5,16 +5,18 @@ export class Game {
   constructor() {
     this.rounds = 0;
     this.smallBlindId = 0;
-    this.bigBlind = 0; // temp value - should use smallBlind + 1
+    this.bigBlind = 2; // temp value - should use smallBlind + 1
     this.smallBlind = 0;
     this.players = [];
     this.playerCount = 0;
     this.pot = 0;
     this.deck = new Deck();
-    this.bigBlind = 2;
+    this.bigBlindAmount = 2;
+    this.smallBlindAmount = this.bigBlindAmount / 2;
     this.startingMoney = 1500;
     this.playOrder = [];
     this.flop = [];
+    this.biggestBet = this.bigBlindAmount;
   }
 
   addPlayer(playerName) {
@@ -55,8 +57,10 @@ export class Game {
         }
       }
 
-      //draw
+      //draw cards
+      this.setBlindPot();
       this.drawCards();
+      this.updatePot();
 
       // deal to flop - burn a card
       console.log("burned " + this.deck.getCard());
@@ -88,47 +92,55 @@ export class Game {
         let ul = document.getElementById(id_name);
         let li = document.createElement("li");
         li.id = "card-" + i;
-        // li.appendChild(document.createTextNode(card.describe()));
         let cardImg = document.createElement("img");
         cardImg.src = "./cards/" + card.describe() + ".png";
-        // li.appendChild(document.createTextNode(card.describe()));
         li.appendChild(cardImg);
         ul.appendChild(li);
         i += 1;
       }
-      //el = document.createElement("ul");
-      //el.id = player.getName() + "-money";
-      rNode.parentNode.insertBefore(el, rNode.nextSibling);
+
       let btn_fold = document.createElement("button");
       let btn_check = document.createElement("button");
+      let btn_call = document.createElement("button");
       let btn_raise = document.createElement("button");
 
       btn_fold.id = player.getName() + "-fold";
       btn_check.id = player.getName() + "-check";
+      btn_call.id = player.getName() + "-call";
       btn_raise.id = player.getName() + "-raise";
 
       btn_fold.innerText = "Fold";
       btn_check.innerText = "Check";
+      btn_call.innerText = "Call";
       btn_raise.innerText = "Raise";
 
       const textBox = document.createElement("input");
       textBox.setAttribute("type", "text");
+      textBox.id = player.getName() + "-raiseBox";
 
       el.appendChild(document.createElement("p"));
       el.appendChild(btn_fold);
       el.appendChild(btn_check);
+      el.appendChild(btn_call);
       el.appendChild(textBox);
       el.appendChild(btn_raise);
       el.appendChild(document.createElement("p"));
+
+      this.updatePlayerMoney(player);
+    }
+  }
+
+  updatePlayerMoney(player) {
+    {
       let id = document.getElementById("li-" + player.getName());
       if (player === this.bigBlind) {
         id.innerText =
-          player.getName() + ", $" + player.getMoney() + ", Big blind";
+          player.getName() + ", $" + player.showMoney() + ", Big blind";
       } else if (player === this.smallBlind) {
         id.innerText =
-          player.getName() + ", $" + player.getMoney() + ", Small blind";
+          player.getName() + ", $" + player.showMoney() + ", Small blind";
       } else {
-        id.innerText = player.getName() + ", $" + player.getMoney();
+        id.innerText = player.getName() + ", $" + player.showMoney();
       }
     }
   }
@@ -161,12 +173,54 @@ export class Game {
   }
 
   fold(player) {
-    document.getElementById(player + "-fold").disabled = true;
-    document.getElementById(player + "-check").disabled = true;
-    document.getElementById(player + "-raise").disabled = true;
+    this.disableButtons(player);
+
+    player = this.players[player.split("-")[1]];
+    player.setStatus("Fold");
+  }
+
+  check(player) {
+    this.disableButtons(player);
+
+    player = this.players[player.split("-")[1]];
+    player.setStatus("Check");
+  }
+
+  call(player) {
+    this.disableButtons(player);
+    player = this.players[player.split("-")[1]];
+    if (player.Bet < this.biggestBet && player.money >= this.biggestBet) {
+      this.pot += this.biggestBet;
+      player.removeMoney(this.biggestBet);
+    }
+    this.updatePot();
+    this.updatePlayerMoney(player);
+  }
+
+  raise(player) {
+    player = this.players[player.split("-")[1]];
+    this.disableButtons(player);
   }
 
   getPlayers() {
     return this.players();
+  }
+
+  disableButtons(player) {
+    document.getElementById(player + "-fold").disabled = true;
+    document.getElementById(player + "-check").disabled = true;
+    document.getElementById(player + "-raise").disabled = true;
+    document.getElementById(player + "-call").disabled = true;
+    document.getElementById(player + "-raiseBox").disabled = true;
+  }
+
+  setBlindPot() {
+    this.bigBlind.removeMoney(this.bigBlindAmount);
+    this.smallBlind.removeMoney(this.smallBlindAmount);
+    this.pot += this.bigBlindAmount + this.smallBlindAmount;
+  }
+
+  updatePot() {
+    document.getElementById("pot-size").innerText = "Pot size: $" + this.pot;
   }
 }
