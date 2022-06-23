@@ -33,7 +33,7 @@ export class Deck {
         console.log("shuffled deck");
     }
 
-    getCard(){
+    getCard() {
         return this.deck.pop();
     }
 }

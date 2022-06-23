@@ -1,8 +1,8 @@
 import {Deck} from "./deck.js";
 import {Player} from "./player.js";
 
-export class Game{
-    constructor(){
+export class Game {
+    constructor() {
         this.rounds = 0;
         this.smallBlindId = 0;
         this.bigBlind = 0; // temp value - should use smallBlind + 1
@@ -17,7 +17,7 @@ export class Game{
         this.flop = []
     }
 
-    addPlayer(playerName){
+    addPlayer(playerName) {
         let newPlayer = new Player(playerName, this.startingMoney);
         this.players.push(newPlayer);
         this.smallBlindId = this.playerCount - 1;
@@ -30,12 +30,12 @@ export class Game{
         ul.appendChild(li);
     }
 
-    removePlayer(player){
+    removePlayer(player) {
         this.players = this.players.filter(e => e !== player);
     }
 
-    startGame(){
-        if(this.playerCount > 1) {
+    startGame() {
+        if (this.playerCount > 1) {
             this.smallBlind = this.players[this.smallBlindId];
             this.bigBlind = this.players[this.getBigBlindId()];
             console.log("Starting game.");
@@ -48,15 +48,15 @@ export class Game{
             this.updateOrder();
 
             // deal cards
-            for(let i = 0; i < 2; i++){
-                for(const player of this.playOrder){
+            for (let i = 0; i < 2; i++) {
+                for (const player of this.playOrder) {
                     // console.log(player);
                     player.addCard(this.deck.getCard());
                 }
             }
 
             //draw cards
-            for(const player of this.playOrder){
+            for (const player of this.playOrder) {
                 console.log(player.getName());
                 player.printCards();
                 let el = document.createElement("ul");
@@ -65,8 +65,8 @@ export class Game{
                 let rNode = document.getElementById("li-" + player.getName());
                 rNode.parentNode.insertBefore(el, rNode.nextSibling);
 
-                let i=0;
-                for(const card of player.getCards()){
+                let i = 0;
+                for (const card of player.getCards()) {
                     let ul = document.getElementById(id_name);
                     let li = document.createElement("li");
                     li.id = "card-" + i;
@@ -76,7 +76,7 @@ export class Game{
                     // li.appendChild(document.createTextNode(card.describe()));
                     li.appendChild(cardImg);
                     ul.appendChild(li);
-                    i+=1;
+                    i += 1;
                 }
 
                 //el = document.createElement("ul");
@@ -103,10 +103,10 @@ export class Game{
                 el.appendChild(textBox);
                 el.appendChild(btn_raise);
                 el.appendChild(document.createElement("p"));
-                let id = document.getElementById("li-"+player.getName());
-                if(player===this.bigBlind){
+                let id = document.getElementById("li-" + player.getName());
+                if (player === this.bigBlind) {
                     id.innerText = player.getName() + ", $" + player.getMoney() + ", Big blind";
-                } else if(player===this.smallBlind) {
+                } else if (player === this.smallBlind) {
                     id.innerText = player.getName() + ", $" + player.getMoney() + ", Small blind";
                 } else {
                     id.innerText = player.getName() + ", $" + player.getMoney();
@@ -116,10 +116,10 @@ export class Game{
 
             // deal to flop - burn a card
             console.log("burned " + this.deck.getCard())
-            for(let i = 0; i < 3; i++){
+            for (let i = 0; i < 3; i++) {
                 this.flop.push(this.deck.getCard());
             }
-            for(const card of this.flop){
+            for (const card of this.flop) {
                 let ul = document.getElementById("flop-list");
                 let cardImg = document.createElement("img");
                 cardImg.src = "./cards/" + card.describe() + ".png";
@@ -128,26 +128,25 @@ export class Game{
             }
 
 
-
         }
 
     }
 
-    getBigBlindId(){
-        if(this.smallBlindId === this.playerCount){
+    getBigBlindId() {
+        if (this.smallBlindId === this.playerCount) {
             return 0;
         } else {
-            return this.smallBlindId+1;
+            return this.smallBlindId + 1;
         }
     }
 
-    updateOrder(){
+    updateOrder() {
         this.playOrder = this.players.slice(this.getBigBlindId()).concat(this.players.slice(0, this.getBigBlindId()));
         console.log("test");
     }
 
-    play_river(){
-        if(this.flop.length < 5) {
+    play_river() {
+        if (this.flop.length < 5) {
             let card = this.deck.getCard();
             this.flop.push(card);
             let ul = document.getElementById("flop-list");
@@ -158,13 +157,13 @@ export class Game{
         }
     }
 
-    fold(player){
+    fold(player) {
         document.getElementById(player + "-fold").disabled = true;
         document.getElementById(player + "-check").disabled = true;
         document.getElementById(player + "-raise").disabled = true;
     }
 
-    getPlayers(){
+    getPlayers() {
         return this.players();
     }
 }

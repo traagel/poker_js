@@ -1,5 +1,5 @@
-export class Player{
-    constructor(name, money){
+export class Player {
+    constructor(name, money) {
         this.name = name;
         this.money = money;
         this.hand = [];
@@ -8,8 +8,8 @@ export class Player{
         this.status = "";
     }
 
-    addCard(card){
-        if(this.cardsInHand<2) {
+    addCard(card) {
+        if (this.cardsInHand < 2) {
             this.hand.push(card);
             this.cardsInHand = this.hand.length;
             console.log(this.name + " got " + card.describe());
@@ -18,38 +18,38 @@ export class Player{
         }
     }
 
-    printCards(){
+    printCards() {
         console.log(this.hand[0].describe() + "," + this.hand[1].describe());
     }
 
-    getCards(){
+    getCards() {
         return this.hand;
     }
 
-    getMoney(){
+    getMoney() {
         return this.money;
     }
 
-    clearHand(){
+    clearHand() {
         this.hand = [];
     }
 
-    placeBet(amount){
-        if(amount <= this.money) {
+    placeBet(amount) {
+        if (amount <= this.money) {
             this.currentBet = amount;
             this.money -= amount;
         }
     }
 
-    getName(){
+    getName() {
         return this.name;
     }
 
-    setStatus(status){
+    setStatus(status) {
         this.status = status;
     }
 
-    getStatus(){
+    getStatus() {
         return this.status;
     }
 }
