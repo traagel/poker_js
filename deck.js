@@ -1,5 +1,3 @@
-import { Card } from "./card.js";
-
 export class Deck {
   constructor() {
     this.deck = this.create();
@@ -35,7 +33,7 @@ export class Deck {
 
   show() {
     for (const card of this.deck) {
-      console.log(card.getValue());
+      console.log(card.describe());
     }
   }
 
@@ -52,5 +50,24 @@ export class Deck {
 
   getCard() {
     return this.deck.pop();
+  }
+}
+
+class Card {
+  constructor(suit, value) {
+    this.suit = suit;
+    this.value = value;
+  }
+
+  describe() {
+    return this.value + "-" + this.suit;
+  }
+
+  getSuit() {
+    return this.suit;
+  }
+
+  getValue() {
+    return this.value;
   }
 }

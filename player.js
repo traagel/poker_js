@@ -6,6 +6,7 @@ export class Player {
     this.cardsInHand = 0;
     this.Bet = 0;
     this.status = "";
+    this.blind = "";
   }
 
   addCard(card) {
