@@ -16,7 +16,7 @@ let conditionsFulfilled = {
     onePair: false, //done
     twoPair: false, //done
     threeOfAKind: false, //done
-    straight: false, //TODO
+    straight: false, //done
     flush: false, //done
     fullHouse: false, //done
     fourOfAKind: false, //done
@@ -29,9 +29,8 @@ export function winConditions(dealerHand, playerHand) {
     const result = countCards(cards);
 
     checkConditionsFulfilled(result);
-    console.log(result);
-
     checkFlush(cards);
+    checkStraight(cards);
     console.log(conditionsFulfilled);
     resetConditionsFulfilled();
 }
@@ -116,6 +115,44 @@ function checkFlush(cards) {
 
     if (Object.keys(Object.filter(counts, (count) => count > 4)).length > 0) {
         conditionsFulfilled.flush = true;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function mapValues(cards) {
+    const values = [];
+    for (const card of cards) {
+        const value = card.getValue();
+        if (value === 'A') {
+            values.push(14);
+        } else if (value === 'K') {
+            values.push(13);
+        } else if (value === 'Q') {
+            values.push(12);
+        } else if (value === 'J') {
+            values.push(11);
+        } else {
+            values.push(parseInt(value));
+        }
+    }
+    values.sort(function (a, b) {
+        return a - b;
+    });
+    return values;
+}
+
+function checkStraight(cards) {
+    const values = mapValues(cards);
+    for (const value of values) {
+        let arr = [value, value + 1, value + 2, value + 3, value + 4];
+        let isStraight = arr.every((element) => {
+            return values.includes(element);
+        });
+        if (isStraight) {
+            conditionsFulfilled.straight = true;
+        }
     }
 }
 
